@@ -1,0 +1,28 @@
+{
+    "name": "halloverden/symfony-messenger-queue-events-bundle",
+    "description": "Additional events for symfony messenger",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tom Roar Furunes",
+            "email": "tom@forbundspartner.no"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "php": "^7.4",
+        "symfony/framework-bundle": "^5.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "HalloVerden\\MessengerQueueEventsBundle\\": "src"
+        }
+    },
+    "config": {
+        "platform": {
+            "php": "7.4"
+        }
+    }
+}
