@@ -13,7 +13,11 @@
     "prefer-stable": true,
     "require": {
         "php": ">=7.4",
-        "symfony/framework-bundle": "^5.2"
+        "symfony/framework-bundle": "^5.2",
+        "symfony/messenger": "^5.2",
+        "doctrine/doctrine-bundle": "^2.3",
+        "doctrine/orm": "^2.8",
+        "symfony/uid": "^5.2"
     },
     "autoload": {
         "psr-4": {
