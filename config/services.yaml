@@ -1,0 +1,49 @@
+services:
+    hallo_verden_queue_events.transport_name_service:
+        class: HalloVerden\MessengerQueueEventsBundle\Services\TransportNameService
+
+    hallo_verden_queue_events.dispatch_events_command:
+        class: HalloVerden\MessengerQueueEventsBundle\Command\DispatchEventsCommand
+        arguments:
+            $eventDispatcher: '@event_dispatcher'
+            $queueEventService: '@hallo_verden_queue_events.queue_event_service'
+            $transportNameService: '@hallo_verden_queue_events.transport_name_service'
+            $transportEventInformationMapping: !abstract defined in Extension
+            $enabled: '%hallo_verden_messenger_queue_events.enabled%'
+        tags:
+            - { name: 'console.command' }
+
+    hallo_verden_queue_events.queue_event_message_repository:
+        class: HalloVerden\MessengerQueueEventsBundle\Repository\QueueEventMessageRepository
+        arguments:
+            $registry: '@doctrine'
+
+    hallo_verden_queue_events.queue_event_service:
+        class: HalloVerden\MessengerQueueEventsBundle\Services\QueueEventService
+        arguments:
+            $queueEventMessageRepository: '@hallo_verden_queue_events.queue_event_message_repository'
+
+    HalloVerden\MessengerQueueEventsBundle\Services\QueueEventServiceInterface:
+        alias: hallo_verden_queue_events.queue_event_service
+
+    hallo_verden_queue_events.middleware.store_message:
+        class: HalloVerden\MessengerQueueEventsBundle\Messenger\Middleware\StoreQueueEventMessageMiddleware
+        arguments:
+            $queueEventMessageRepository: '@hallo_verden_queue_events.queue_event_message_repository'
+            $sendersLocator: '@messenger.senders_locator'
+            $enabled: '%hallo_verden_messenger_queue_events.enabled%'
+
+    hallo_verden_queue_events.middleware.remove_message:
+        class: HalloVerden\MessengerQueueEventsBundle\Messenger\Middleware\RemoveQueueEventMessageMiddleware
+        arguments:
+            $queueEventMessageRepository: '@hallo_verden_queue_events.queue_event_message_repository'
+            $enabled: '%hallo_verden_messenger_queue_events.enabled%'
+            $failureTransport: !abstract defined in SetFailureTransportCompilerPass
+
+    hallo_verden_queue_events.listener.store_queue_event_message_on_failed:
+        class: HalloVerden\MessengerQueueEventsBundle\EventListener\StoreQueueEventMessageOnMessageFailedListener
+        arguments:
+            $queueEventMessageRepository: '@hallo_verden_queue_events.queue_event_message_repository'
+            $failureTransport: !abstract defined in SetFailureTransportCompilerPass
+        tags:
+            - { name: kernel.event_subscriber }
