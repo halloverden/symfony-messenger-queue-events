@@ -25,6 +25,7 @@ class Configuration implements ConfigurationInterface {
       ->children()
         ->booleanNode('enabled')->defaultFalse()->end()
         ->arrayNode('transport_event_information_mapping')
+          ->useAttributeAsKey('__transport')
           ->variablePrototype()
             ->validate()
               ->ifTrue(fn($v) => null !== $v && !\is_array($v))
