@@ -97,9 +97,11 @@ class QueueEventMessageRepository extends ServiceEntityRepository implements Que
   public function getFirstAvailableMessage(string $transport): ?QueueEventMessage {
     $qb = $this->createQueryBuilder('qem');
 
-    $qb->addOrderBy('qem.availableAt', 'ASC')
+    $qb->andWhere($qb->expr()->eq('qem.transport', ':transport'))
+      ->addOrderBy('qem.availableAt', 'ASC')
       ->addOrderBy('qem.id', 'ASC')
-      ->setMaxResults(1);
+      ->setMaxResults(1)
+      ->setParameter('transport', $transport);
 
 
     return $qb->getQuery()->getOneOrNullResult();
@@ -112,9 +114,11 @@ class QueueEventMessageRepository extends ServiceEntityRepository implements Que
   public function getLastAvailableMessage(string $transport): ?QueueEventMessage {
     $qb = $this->createQueryBuilder('qem');
 
-    $qb->addOrderBy('qem.availableAt', 'DESC')
+    $qb->andWhere($qb->expr()->eq('qem.transport', ':transport'))
+      ->addOrderBy('qem.availableAt', 'DESC')
       ->addOrderBy('qem.id', 'DESC')
-      ->setMaxResults(1);
+      ->setMaxResults(1)
+      ->setParameter('transport', $transport);
 
 
     return $qb->getQuery()->getOneOrNullResult();
