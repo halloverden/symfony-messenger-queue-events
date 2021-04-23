@@ -26,7 +26,7 @@ Usage
 Create a cronjob that executes `bin/console hallo_verden:messenger_queue_events:dispatch`
 at a desired interval (i.e. every 15 seconds)
 
-Now you can crate a event listener and act on the `MessageQueueEvent`:
+Now you can create a event listener and act on the `MessageQueueEvent`:
 
 ```php
 use HalloVerden\MessengerQueueEventsBundle\Event\MessageQueueEvent;
