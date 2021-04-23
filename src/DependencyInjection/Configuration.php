@@ -4,6 +4,7 @@
 namespace HalloVerden\MessengerQueueEventsBundle\DependencyInjection;
 
 
+use HalloVerden\MessengerQueueEventsBundle\Event\MessageQueueEvent;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -20,7 +21,28 @@ class Configuration implements ConfigurationInterface {
   public function getConfigTreeBuilder(): TreeBuilder {
     $treeBuilder = new TreeBuilder('hallo_verden_messenger_queue_events');
 
-    // TODO: define config tree
+    $treeBuilder->getRootNode()
+      ->children()
+        ->booleanNode('enabled')->defaultFalse()->end()
+        ->arrayNode('transport_event_information_mapping')
+          ->useAttributeAsKey('__transport')
+          ->variablePrototype()
+            ->validate()
+              ->ifTrue(fn($v) => null !== $v && !\is_array($v))
+              ->thenInvalid('Must be array or null')
+              ->ifTrue(function ($v) {
+                foreach ($v ?? [] as $eventInformation) {
+                  if (!in_array($eventInformation, MessageQueueEvent::EVENT_INFORMATION_TYPES)) {
+                    return true;
+                  }
+                }
+                return false;
+              })
+              ->thenInvalid(\sprintf('Must be one of %s', implode(', ', MessageQueueEvent::EVENT_INFORMATION_TYPES)))
+            ->end()
+          ->end()
+        ->end()
+      ->end();
 
     return $treeBuilder;
   }
