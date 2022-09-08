@@ -7,20 +7,15 @@ use HalloVerden\MessengerQueueEventsBundle\Event\MessageQueueEvent;
 use HalloVerden\MessengerQueueEventsBundle\Services\QueueEventServiceInterface;
 use HalloVerden\MessengerQueueEventsBundle\Services\TransportNameServiceInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-/**
- * Class DispatchEventsCommand
- *
- * @package HalloVerden\MessengerQueueEventsBundle
- */
+#[AsCommand(name: 'hallo_verden:messenger_queue_events:dispatch')]
 class DispatchEventsCommand extends Command {
-  protected static $defaultName = 'hallo_verden:messenger_queue_events:dispatch';
-
   private EventDispatcherInterface $eventDispatcher;
   private QueueEventServiceInterface $queueEventService;
   private TransportNameServiceInterface $transportNameService;
