@@ -10,58 +10,30 @@ use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Stamp\DelayStamp;
 use Symfony\Component\Uid\Uuid;
 
-/**
- * Class QueueEventMessage
- *
- * @package HalloVerden\MessengerQueueEventsBundle\Entity
- *
- * @ORM\Entity()
- */
+#[ORM\Entity]
 class QueueEventMessage {
 
-  /**
-   * @var int
-   *
-   * @ORM\Id()
-   * @ORM\GeneratedValue(strategy="AUTO")
-   * @ORM\Column(name="id", type="integer", unique=true)
-   */
+  #[ORM\Id, ORM\GeneratedValue(strategy: 'AUTO'), ORM\Column(name: 'id', type: 'integer', unique: true)]
   private int $id;
 
   /**
    * This is a string because I don't want to collide with someone using ramsey\uuid, since the doctrine type for this have the same name as symfony/uid :(
    *   This is NOT unique, since the same message can be added multiple times with different transports.
-   *
-   * @var string
-   *
-   * @ORM\Column(name="uuid", type="string", unique=false)
    */
+  #[ORM\Column(name: 'uuid', type: 'string', nullable: false)]
   private string $uuid;
 
-  /**
-   * @var string|null
-   *
-   * @ORM\Column(name="transport", type="string", nullable=true)
-   */
+  #[ORM\Column(name: 'transport', type: 'string', nullable: true)]
   private ?string $transport;
 
-  /**
-   * @var \DateTime
-   *
-   * @ORM\Column(name="created_at", type="datetime", nullable=false)
-   */
+  #[ORM\Column(name: 'created_at', type: 'datetime', nullable: false)]
   private \DateTime $createdAt;
 
-  /**
-   * @var \DateTime
-   *
-   * @ORM\Column(name="available_at", type="datetime", nullable=false)
-   */
+  #[ORM\Column(name: 'available_at', type: 'datetime', nullable: false)]
   private \DateTime $availableAt;
 
   /**
    * QueueEventMessage constructor.
-   *
    */
   public function __construct() {
     $this->uuid = Uuid::v4();
